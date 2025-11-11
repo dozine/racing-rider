@@ -1,5 +1,5 @@
 import * as THREE from "three";
-
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 //scene: 3d 객체와 조명이 배치되는 곳
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xff5ebebb); // 배경색
@@ -18,20 +18,48 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// geometry : 큐브 모양 뼈대
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-// material : 표면의 색상과 질감
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-// mesh : 형태와 재질을 합친 3d객체
-const cube = new THREE.Mesh(geometry, material);
-// 씬에 큐브를 추가
-scene.add(cube);
+let riderMesh;
+let ambientLight;
+let directionalLight;
 
+// 조명
+ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+scene.add(ambientLight);
+
+// 방향 조명
+directionalLight = new THREE.DirectionalLight(0xffffff, 2.0);
+directionalLight.position.set(5, 10, 5); //빛 위치 설정
+scene.add(directionalLight);
+
+const loader = new GLTFLoader();
+const modelPath = "/rider.glb";
+
+//loader.load(url,onLoad,onProgress,onError)
+loader.load(
+  modelPath,
+  function (gltf) {
+    riderMesh = gltf.scene;
+
+    //크기 및 위치 조정
+    riderMesh.scale.set(0.5, 0.5, 0.5);
+    riderMesh.position.set(0, 0, 0);
+
+    scene.add(riderMesh);
+    console.log("라이더 모델 로딩 성공!");
+  },
+  undefined, // 로딩 중 콜백 생략(onProgress)
+  function (error) {
+    //onError
+    console.error("모델 로딩 중 오류 발생:", error);
+  }
+);
+
+// geometry : 큐브 모양 뼈대
 // 매 프레임마다 호출되어 화면을 업데이트
 function animate() {
   requestAnimationFrame(animate);
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
+  if (riderMesh) {
+  }
   renderer.render(scene, camera);
 }
 

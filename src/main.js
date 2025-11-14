@@ -11,20 +11,24 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.set(3, 3, 10);
-camera.lookAt(0, 0, 0);
+camera.position.set(0, 8, -25);
+camera.lookAt(0, 0, 10);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 let racingGame = null;
-const numRiders = 2;
+const numRiders = 10;
 const riderMeshes = [];
 const initialZPosition = -10;
 const turnInterval = 100;
 const shouldMove = () => Math.random() >= 0.4;
 const modelPath = "/rider.glb";
+let winnerDeclared = false;
+
+const finish_distance = 40;
+const finish_line_z = initialZPosition + finish_distance;
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
 const directionalLight = new THREE.DirectionalLight(0xffffff, 2.0);
@@ -40,6 +44,12 @@ plane.rotation.x = -Math.PI / 2;
 plane.position.y = 0;
 scene.add(plane);
 
+const finishLineGeometry = new THREE.BoxGeometry(10, 0.1, 0.1);
+const finishLineMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+const finishLine = new THREE.Mesh(finishLineGeometry, finishLineMaterial);
+
+finishLine.position.set(0, 0.05, finish_line_z);
+scene.add(finishLine);
 const loader = new GLTFLoader();
 
 function loadRiderModel(index) {
@@ -83,23 +93,38 @@ let lastUpdateTime = 0;
 
 function animate(currentTime) {
   requestAnimationFrame(animate);
-  if (racingGame) {
+
+  if (racingGame && racingGame.gameStatus === "RUNNING") {
     if (currentTime - lastUpdateTime > turnInterval) {
-      const updatedPositions = racingGame.playTurn();
-      updatedPositions.forEach((car, index) => {
-        const mesh = riderMeshes[index];
-        if (mesh) {
-          mesh.position.z = initialZPosition + car.distance;
-          console.log(`${car.name} distance: ${car.distance}`);
-        }
-      });
+      racingGame.playTurn();
+      if (racingGame.finish(finish_distance)) {
+        console.log("경주 종료! 우승자를 확인합니다.");
+      }
 
       lastUpdateTime = currentTime;
     }
+
+    racingGame.cars.forEach((car, index) => {
+      const mesh = riderMeshes[index];
+      if (mesh) {
+        mesh.position.z = initialZPosition + car.distance;
+      }
+    });
+  } else if (
+    racingGame &&
+    racingGame.gameStatus === "FINISHED" &&
+    !winnerDeclared
+  ) {
+    const winner = racingGame.getWinner();
+    console.log(
+      `🏆 경주가 끝났습니다! 우승자는 ${winner.name} (거리: ${winner.distance}) 입니다!`
+    );
+    winnerDeclared = true;
   }
 
   renderer.render(scene, camera);
 }
+
 animate(0);
 
 window.addEventListener("resize", () => {

@@ -75,7 +75,9 @@ function loadRiderModel(index) {
           (_, i) => `Rider ${i + 1}`
         );
         racingGame = new RacingGame(carNames, shouldMove);
-        console.log("레이싱 게임 시작 준비 완료!");
+        const startButton = document.getElementById("startButton");
+        startButton.disabled = false;
+        console.log("시작 버튼을 눌러주세요.");
       }
     },
     undefined,
@@ -126,6 +128,17 @@ function animate(currentTime) {
 }
 
 animate(0);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const startButton = document.getElementById("startButton");
+  startButton.disabled = true;
+  startButton.addEventListener("click", () => {
+    if (racingGame && racingGame.gameStatus === "READY") {
+      racingGame.startGame();
+      startButton.style.display = "none";
+    }
+  });
+});
 
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;

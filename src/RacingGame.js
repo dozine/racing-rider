@@ -4,7 +4,11 @@ export default class RacingGame {
   constructor(carNames, moveConditionFn) {
     this.cars = carNames.map((name) => new Car(name));
     this.moveConditionFn = moveConditionFn;
+    this.gameStatus = "READY";
+  }
+  startGame() {
     this.gameStatus = "RUNNING";
+    console.log("경기 시작");
   }
 
   playTurn() {

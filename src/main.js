@@ -118,9 +118,11 @@ function animate(currentTime) {
     !winnerDeclared
   ) {
     const winner = racingGame.getWinner();
-    console.log(
-      `🏆 경주가 끝났습니다! 우승자는 ${winner.name} (거리: ${winner.distance}) 입니다!`
-    );
+    const message = `${winner.distance}m 경주에서 ${winner.name}이(가) 우승했습니다!`;
+    const result = document.getElementById("result");
+    const winnerMessage = document.getElementById("winnerMessage");
+    winnerMessage.textContent = message;
+    result.style.display = "flex";
     winnerDeclared = true;
   }
 

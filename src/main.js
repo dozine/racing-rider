@@ -74,7 +74,7 @@ function loadRiderModel(index) {
           { length: numRiders },
           (_, i) => `Rider ${i + 1}`
         );
-        racingGame = new RacingGame(carNames, shouldMove);
+        racingGame = new RacingGame(carNames, shouldMove, finish_distance);
         const startButton = document.getElementById("startButton");
         startButton.disabled = false;
         console.log("시작 버튼을 눌러주세요.");

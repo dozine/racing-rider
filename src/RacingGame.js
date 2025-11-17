@@ -1,10 +1,10 @@
 import Car from "./Car.js";
 
 export default class RacingGame {
-  constructor(carNames, moveConditionFn) {
+  constructor(carNames, moveConditionFn, finishDistance) {
     this.cars = carNames.map((name) => new Car(name));
     this.moveConditionFn = moveConditionFn;
-
+    this.finishDistance = finishDistance;
     this.gameStatus = "READY";
   }
   startGame() {
@@ -15,8 +15,11 @@ export default class RacingGame {
   playTurn() {
     if (this.gameStatus !== "RUNNING") return this.cars;
     this.cars.forEach((car) => {
-      const isMovable = this.moveConditionFn();
-      car.move(isMovable);
+      const hasFinished = car.distance >= this.finishDistance;
+      if (!hasFinished) {
+        const isMovable = this.moveConditionFn();
+        car.move(isMovable);
+      }
     });
 
     return this.cars.map((car) => ({
@@ -32,8 +35,10 @@ export default class RacingGame {
     }));
   }
 
-  finish(distance) {
-    const isFinished = this.cars.some((car) => car.distance >= distance);
+  finish() {
+    const isFinished = this.cars.every(
+      (car) => car.distance >= this.finishDistance
+    );
     if (isFinished) {
       this.gameStatus = "FINISHED";
       return true;

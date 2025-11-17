@@ -4,6 +4,7 @@ export default class RacingGame {
   constructor(carNames, moveConditionFn) {
     this.cars = carNames.map((name) => new Car(name));
     this.moveConditionFn = moveConditionFn;
+
     this.gameStatus = "READY";
   }
   startGame() {
@@ -40,8 +41,13 @@ export default class RacingGame {
     return false;
   }
 
-  getWinner() {
-    if (this.gameStatus !== "FINISHED") return null;
-    return this.cars.reduce((a, b) => (a.distance > b.distance ? a : b));
+  getRaceResults() {
+    if (this.gameStatus !== "FINISHED") return [];
+    const results = this.cars.map((car) => ({
+      name: car.name,
+      distance: car.distance,
+    }));
+    results.sort((a, b) => b.distance - a.distance);
+    return results;
   }
 }

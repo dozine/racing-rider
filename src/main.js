@@ -117,12 +117,29 @@ function animate(currentTime) {
     racingGame.gameStatus === "FINISHED" &&
     !winnerDeclared
   ) {
-    const winner = racingGame.getWinner();
-    const message = `${winner.distance}m 경주에서 ${winner.name}이(가) 우승했습니다!`;
-    const result = document.getElementById("result");
+    const results = racingGame.getRaceResults();
+    const resultOverlay = document.getElementById("resultOverlay");
     const winnerMessage = document.getElementById("winnerMessage");
-    winnerMessage.textContent = message;
-    result.style.display = "flex";
+
+    const olElement = document.createElement("ol");
+    olElement.style.cssText =
+      "list-style-type: none; padding-left: 0; text-align: left; margin-top: 15px;";
+
+    results.forEach((car, index) => {
+      const rank = index + 1;
+      const rankPrefix = `${rank}등`;
+
+      const li = document.createElement("li");
+      li.style.cssText = "font-size: 24px; margin-bottom: 8px;";
+
+      li.textContent = `${rankPrefix}: ${car.name} (${car.distance}m)`;
+
+      olElement.appendChild(li);
+    });
+
+    winnerMessage.innerHTML = "";
+    winnerMessage.appendChild(olElement);
+    resultOverlay.style.display = "flex";
     winnerDeclared = true;
   }
 

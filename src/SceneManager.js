@@ -54,4 +54,17 @@ export default class SceneManager {
   getRenderer() {
     return this.renderer;
   }
+  updateCameraToTrack(targetPosition) {
+    if (!targetPosition) return;
+
+    const newCameraZ = targetPosition.z - 15;
+
+    this.camera.position.set(
+      this.camera.position.x,
+      this.camera.position.y,
+      newCameraZ
+    );
+
+    this.camera.lookAt(targetPosition.x, targetPosition.y, targetPosition.z);
+  }
 }

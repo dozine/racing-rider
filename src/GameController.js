@@ -32,6 +32,13 @@ export default class GameController {
       this.uiManager.hideStartButton();
     }
   }
+  trackLeadRider() {
+    const leadPosition = this.riderManager.getLeadRiderPosition();
+
+    if (leadPosition) {
+      this.sceneManager.updateCameraToTrack(leadPosition);
+    }
+  }
 
   update(currentTime) {
     if (!this.racingGame) return;
@@ -48,6 +55,7 @@ export default class GameController {
       }
 
       this.riderManager.updateRiderPositions(this.racingGame.cars);
+      this.trackLeadRider();
     } else if (
       this.racingGame.gameStatus === "FINISHED" &&
       !this.winnerDeclared

@@ -62,4 +62,14 @@ export default class RiderManager {
   getRiderNames() {
     return Array.from({ length: this.numRiders }, (_, i) => `Rider ${i + 1}`);
   }
+  getLeadRiderPosition() {
+    if (this.riderMeshes.length === 0) return null;
+    let leadMesh = this.riderMeshes[0];
+    this.riderMeshes.forEach((mesh) => {
+      if (mesh.position.z > leadMesh.position.z) {
+        leadMesh = mesh;
+      }
+    });
+    return leadMesh.position;
+  }
 }

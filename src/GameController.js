@@ -40,7 +40,7 @@ export default class GameController {
       if (currentTime - this.lastUpdateTime > this.config.turnInterval) {
         this.racingGame.playTurn();
 
-        if (this.racingGame.finish(this.config.finishDistance)) {
+        if (this.racingGame.finish()) {
           console.log("경주 종료! 우승자를 확인합니다.");
         }
 

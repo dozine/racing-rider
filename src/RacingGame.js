@@ -6,6 +6,7 @@ export default class RacingGame {
     this.moveConditionFn = moveConditionFn;
     this.finishDistance = finishDistance;
     this.gameStatus = "READY";
+    this.currentTurn = 0;
   }
   startGame() {
     this.gameStatus = "RUNNING";
@@ -14,11 +15,15 @@ export default class RacingGame {
 
   playTurn() {
     if (this.gameStatus !== "RUNNING") return this.cars;
+    this.currentTurn++;
     this.cars.forEach((car) => {
       const hasFinished = car.distance >= this.finishDistance;
       if (!hasFinished) {
         const isMovable = this.moveConditionFn();
         car.move(isMovable);
+        if (car.distance >= this.finishDistance) {
+          car.finishedTurn = this.currentTurn;
+        }
       }
     });
 
@@ -32,6 +37,7 @@ export default class RacingGame {
     return this.cars.map((car) => ({
       name: car.name,
       distance: car.distance,
+      finishedTurn: car.finishedTurn,
     }));
   }
 
@@ -51,8 +57,14 @@ export default class RacingGame {
     const results = this.cars.map((car) => ({
       name: car.name,
       distance: car.distance,
+      finishedTurn: car.finishedTurn,
     }));
-    results.sort((a, b) => b.distance - a.distance);
+    results.sort((a, b) => {
+      if (a.finishedTurn !== b.finishedTurn) {
+        return a.finishedTurn - b.finishedTurn; // 턴이 빠를수록(숫자가 작을수록) 위로
+      }
+      return b.distance - a.distance; // 턴이 같다면, 거리가 길수록 위로
+    });
     return results;
   }
 }

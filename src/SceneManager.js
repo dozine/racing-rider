@@ -1,8 +1,7 @@
 import * as THREE from "three";
-import {
-  CSS2DRenderer,
-  CSS2DObject,
-} from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader.js";
+
 export default class SceneManager {
   constructor() {
     this.scene = new THREE.Scene();
@@ -88,5 +87,21 @@ export default class SceneManager {
     );
 
     this.camera.lookAt(targetPosition.x, targetPosition.y, targetPosition.z);
+  }
+
+  loadHDRI(path) {
+    new EXRLoader().setPath("/").load(
+      path,
+      (texture) => {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+
+        this.scene.background = texture;
+        this.scene.environment = texture;
+      },
+      undefined,
+      (error) => {
+        console.error("HDRI 로드 중 오류 발생:", error);
+      }
+    );
   }
 }

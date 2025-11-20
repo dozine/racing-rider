@@ -6,7 +6,7 @@ import {
 export default class SceneManager {
   constructor() {
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x87ceeb);
+    this.scene.background = new THREE.Color(0xff5ebebb);
 
     this.camera = new THREE.PerspectiveCamera(
       75,
@@ -32,10 +32,21 @@ export default class SceneManager {
   }
 
   setupLights() {
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 2.0);
-    directionalLight.position.set(5, 10, 5);
-
+    const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 3.0);
+    directionalLight.position.set(5, 15, 5);
+    const spotLight = new THREE.SpotLight(
+      0x00ffff,
+      40,
+      100,
+      Math.PI / 8,
+      0.5,
+      0.5
+    );
+    spotLight.position.set(0, 15, 0);
+    spotLight.target.position.set(0, 0, 10);
+    this.scene.add(spotLight);
+    this.scene.add(spotLight.target);
     this.scene.add(ambientLight);
     this.scene.add(directionalLight);
   }

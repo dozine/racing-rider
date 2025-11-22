@@ -71,9 +71,18 @@ export default class RiderManager {
       }
     });
   }
+  getPlayerRiderPosition(index) {
+    const mesh = this.riderMeshes[index];
+    if (mesh) {
+      return mesh.position;
+    }
+    return null;
+  }
 
   getRiderNames() {
-    return Array.from({ length: this.numRiders }, (_, i) => `Rider ${i + 1}`);
+    return Array.from({ length: this.numRiders }, (_, i) =>
+      i === 0 ? `나` : `Rider ${i}`
+    );
   }
   getLeadRiderPosition() {
     if (this.riderMeshes.length === 0) return null;

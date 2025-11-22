@@ -78,13 +78,11 @@ export default class SceneManager {
   updateCameraToTrack(targetPosition) {
     if (!targetPosition) return;
 
-    const newCameraZ = targetPosition.z - 15;
+    const newCameraZ = targetPosition.z + 20;
+    const newCameraY = 10;
+    const newCameraX = 15;
 
-    this.camera.position.set(
-      this.camera.position.x,
-      this.camera.position.y,
-      newCameraZ
-    );
+    this.camera.position.set(newCameraX, newCameraY, newCameraZ);
 
     this.camera.lookAt(targetPosition.x, targetPosition.y, targetPosition.z);
   }

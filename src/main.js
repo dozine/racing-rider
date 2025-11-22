@@ -11,6 +11,7 @@ const config = {
   turnInterval: 100,
   shouldMove: () => Math.random() >= 0.4,
   modelPath: "/rider.glb",
+  playerRiderIndex: 0,
 };
 
 const sceneManager = new SceneManager();

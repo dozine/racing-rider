@@ -6,7 +6,6 @@ export default class GameController {
     this.riderManager = riderManager;
     this.uiManager = uiManager;
     this.config = config;
-
     this.racingGame = null;
     this.lastUpdateTime = 0;
     this.winnerDeclared = false;

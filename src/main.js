@@ -10,7 +10,8 @@ const config = {
   finishDistance: 40,
   turnInterval: 100,
   shouldMove: () => Math.random() >= 0.4,
-  modelPath: "/rider.glb",
+  playerModelPath: "/rider.glb",
+  robotModelPath: "/robot.glb",
   playerRiderIndex: 0,
 };
 
@@ -24,7 +25,7 @@ const riderManager = new RiderManager(
   sceneManager.getScene(),
   config.numRiders,
   config.initialZPosition,
-  config.modelPath
+  config
 );
 const uiManager = new UIManager();
 

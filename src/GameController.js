@@ -62,7 +62,7 @@ export default class GameController {
       !this.winnerDeclared
     ) {
       const results = this.racingGame.getRaceResults();
-      this.uiManager.showResults(results);
+      this.uiManager.showResults(results, this.config.turnInterval);
       this.winnerDeclared = true;
     }
   }

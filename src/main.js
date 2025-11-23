@@ -1,24 +1,43 @@
-import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
+import SceneManager from "./SceneManager.js";
+import TrackManager from "./TrackManager.js";
+import RiderManager from "./RiderManager.js";
+import UIManager from "./UIManager.js";
+import GameController from "./gameController.js";
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+const config = {
+  numRiders: 10,
+  initialZPosition: -10,
+  finishDistance: 40,
+  turnInterval: 100,
+  shouldMove: () => Math.random() >= 0.4,
+  playerModelPath: "/rider.glb",
+  robotModelPath: "/robot.glb",
+  playerRiderIndex: 0,
+};
 
-setupCounter(document.querySelector('#counter'))
+const sceneManager = new SceneManager();
+const trackManager = new TrackManager(
+  sceneManager.getScene(),
+  config.initialZPosition,
+  config.finishDistance
+);
+const riderManager = new RiderManager(
+  sceneManager.getScene(),
+  config.numRiders,
+  config.initialZPosition,
+  config
+);
+const uiManager = new UIManager();
+
+const gameController = new GameController(
+  sceneManager,
+  riderManager,
+  uiManager,
+  config
+);
+
+uiManager.init();
+
+gameController.init().then(() => {
+  gameController.animate(0);
+});

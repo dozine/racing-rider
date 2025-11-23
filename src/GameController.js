@@ -13,7 +13,7 @@ export default class GameController {
 
   async init() {
     await this.riderManager.loadAllRiders();
-    this.sceneManager.loadHDRI("./city.exr");
+    this.sceneManager.loadHDRI("/racing-rider/city.exr");
     const riderNames = this.riderManager.getRiderNames();
     this.racingGame = new RacingGame(
       riderNames,

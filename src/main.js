@@ -10,8 +10,8 @@ const config = {
   finishDistance: 40,
   turnInterval: 100,
   shouldMove: () => Math.random() >= 0.4,
-  playerModelPath: "/rider.glb",
-  robotModelPath: "/robot.glb",
+  playerModelPath: "/racing-rider/rider.glb",
+  robotModelPath: "/racing-rider/robot.glb",
   playerRiderIndex: 0,
 };
 

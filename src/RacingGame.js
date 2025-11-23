@@ -61,9 +61,14 @@ export default class RacingGame {
     }));
     results.sort((a, b) => {
       if (a.finishedTurn !== b.finishedTurn) {
-        return a.finishedTurn - b.finishedTurn; // 턴이 빠를수록(숫자가 작을수록) 위로
+        return a.finishedTurn - b.finishedTurn;
       }
-      return b.distance - a.distance; // 턴이 같다면, 거리가 길수록 위로
+      if (a.distance !== b.distance) {
+        return b.distance - a.distance;
+      }
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
     });
     return results;
   }

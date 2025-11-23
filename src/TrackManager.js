@@ -11,7 +11,7 @@ export default class TrackManager {
   }
 
   createTrack() {
-    const planeGeometry = new THREE.PlaneGeometry(30, 50);
+    const planeGeometry = new THREE.PlaneGeometry(30, 60);
 
     const roadMaterial = new THREE.MeshLambertMaterial({ color: 0x808080 });
     const roadPlane = new THREE.Mesh(planeGeometry, roadMaterial);
@@ -19,7 +19,7 @@ export default class TrackManager {
     roadPlane.position.y = 0;
     this.scene.add(roadPlane);
 
-    const sideGeometry = new THREE.PlaneGeometry(50, 50);
+    const sideGeometry = new THREE.PlaneGeometry(50.25, 60);
     const sideMaterial = new THREE.MeshLambertMaterial({ color: 0x3fe0b0 }); // 배민 그린
     const sidePlane = new THREE.Mesh(sideGeometry, sideMaterial);
     sidePlane.rotation.x = -Math.PI / 2;
@@ -47,12 +47,29 @@ export default class TrackManager {
   }
 
   createFinishLine() {
-    const finishLineGeometry = new THREE.BoxGeometry(10, 0.1, 0.1);
-    const finishLineMaterial = new THREE.MeshBasicMaterial({
+    const finishLineGeometry = new THREE.BoxGeometry(2.5, 0.1, 2.0); // 타일 크기 (너비 2.5)
+    const materialMint = new THREE.MeshBasicMaterial({
       color: 0x3fe0b0,
     });
-    const finishLine = new THREE.Mesh(finishLineGeometry, finishLineMaterial);
-    finishLine.position.set(0, 0.05, this.finishLineZ);
-    this.scene.add(finishLine);
+    const materialDark = new THREE.MeshBasicMaterial({
+      color: 0x1a1a1a,
+    });
+
+    const numTilesX = 12;
+    const totalWidth = 30;
+    const tileSizeX = totalWidth / numTilesX;
+    const centerZ = this.finishLineZ;
+    const centerY = 0;
+    for (let i = 0; i < numTilesX; i++) {
+      const tileX = (i - (numTilesX - 1) / 2) * tileSizeX;
+      const isOddRow = i % 2 !== 0;
+
+      const mesh = new THREE.Mesh(
+        finishLineGeometry,
+        isOddRow ? materialMint : materialDark
+      );
+      mesh.position.set(tileX, centerY, centerZ);
+      this.scene.add(mesh);
+    }
   }
 }

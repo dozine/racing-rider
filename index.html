@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D 라이더 경주 시뮬레이션</title>
+
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+      }
+      canvas {
+        display: block;
+      }
+
+      .rider-label {
+        background-color: rgba(63, 224, 176, 0.8);
+        color: #00ffff;
+        padding: 3px 8px;
+        border-radius: 5px;
+        font-family: "Arial", sans-serif;
+        font-size: 12px;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      #startButton {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+        background-color: #3fe0b0;
+        color: #000000;
+        border: none;
+        box-shadow: 0 0 10px #00ffaa;
+      }
+
+      #resultOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.85);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        color: white;
+        font-family: sans-serif;
+      }
+
+      #resultBox {
+        text-align: center;
+        padding: 40px 60px;
+        border-radius: 10px;
+        background-color: #1c1c1c;
+        box-shadow: 0 0 20px #3fe0b0;
+      }
+
+      #resultBox button {
+        background-color: #3fe0b0;
+        color: black;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        margin-top: 25px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-Dx2h0waV.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <button id="startButton">경주 시작</button>
+
+      <div id="resultOverlay">
+        <div id="resultBox">
+          <h1 style="font-size: 48px; margin-bottom: 10px">🏆 경주 종료</h1>
+          <p id="winnerMessage" style="font-size: 30px; font-weight: bold"></p>
+          <button onclick="window.location.reload()">다시 시작</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

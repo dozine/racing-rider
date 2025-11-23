@@ -1,5 +1,5 @@
 import * as THREE from "three";
-
+import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 export default class TrackManager {
   constructor(scene, initialZPosition, finishDistance) {
     this.scene = scene;
@@ -8,6 +8,7 @@ export default class TrackManager {
     this.finishLineZ = initialZPosition + finishDistance;
     this.createTrack();
     this.createFinishLine();
+    this.createBanner();
   }
 
   createTrack() {
@@ -71,5 +72,64 @@ export default class TrackManager {
       mesh.position.set(tileX, centerY, centerZ);
       this.scene.add(mesh);
     }
+  }
+
+  createBanner() {
+    const bannerWidth = 30;
+    const bannerHeight = 4;
+
+    const bannerGeometry = new THREE.PlaneGeometry(bannerWidth, bannerHeight);
+
+    const bannerMaterial = new THREE.MeshBasicMaterial({
+      color: "#FFFFFF",
+      transparent: true,
+      opacity: 0.9,
+      side: THREE.DoubleSide,
+    });
+
+    const banner = new THREE.Mesh(bannerGeometry, bannerMaterial);
+
+    banner.position.set(0, 10, this.finishLineZ);
+
+    this.scene.add(banner);
+    const pillarHeight = 12;
+    const pillarRadius = 0.5;
+
+    const pillarGeometry = new THREE.CylinderGeometry(
+      pillarRadius,
+      pillarRadius,
+      pillarHeight,
+      8
+    );
+    const pillarMaterial = new THREE.MeshLambertMaterial({ color: 0x555555 }); // 어두운 회색 (금속 느낌)
+
+    const leftPillar = new THREE.Mesh(pillarGeometry, pillarMaterial);
+
+    leftPillar.position.set(
+      -(bannerWidth / 2) - pillarRadius,
+      pillarHeight / 2,
+      this.finishLineZ
+    );
+    this.scene.add(leftPillar);
+
+    const rightPillar = new THREE.Mesh(pillarGeometry, pillarMaterial);
+
+    rightPillar.position.set(
+      bannerWidth / 2 + pillarRadius,
+      pillarHeight / 2,
+      this.finishLineZ
+    );
+    this.scene.add(rightPillar);
+    const textDiv = document.createElement("div");
+    textDiv.textContent = "우아한 테크 코스 완주!";
+    textDiv.style.color = "#1a1a1a";
+    textDiv.style.fontSize = "20px";
+    textDiv.style.fontWeight = "bold";
+    textDiv.style.fontFamily = "Arial, sans-serif";
+    textDiv.style.textAlign = "center";
+
+    const textLabel = new CSS2DObject(textDiv);
+    textLabel.position.set(0, 0, 0.1); // 배너보다 약간 앞에
+    banner.add(textLabel);
   }
 }
